@@ -10,7 +10,6 @@ import ru.milov.shoptest.entity.Shipment;
 import ru.milov.shoptest.entity.User;
 import ru.milov.shoptest.mappers.ProductMapper;
 import ru.milov.shoptest.repository.ProductRepository;
-
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
