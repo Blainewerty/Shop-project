@@ -1,5 +1,6 @@
 package ru.milov.shoptest.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -20,6 +21,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     private User user;
 
@@ -29,13 +31,14 @@ public class Product {
     @Column(name = "vendor_code")
     private String vendorCode;
 
-    @Column(name = "value")
-    private BigDecimal value;
+    @Column(name = "price")
+    private BigDecimal price;
 
     @Column(name = "deleting_sign")
     private boolean deletingSign;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "shipment", joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "id"))
     private List<Shipment> Shipments;

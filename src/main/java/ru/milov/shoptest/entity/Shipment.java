@@ -1,5 +1,6 @@
 package ru.milov.shoptest.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -19,7 +20,8 @@ public class Shipment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
     private Product product;
 
     @Column(name = "barcode")
@@ -28,7 +30,8 @@ public class Shipment {
     @Column(name = "weight")
     private BigDecimal weight;
 
-    @ElementCollection(targetClass = Measure.class, fetch = FetchType.LAZY)
+    @ElementCollection(targetClass = Measure.class,
+            fetch = FetchType.EAGER)
     @CollectionTable(name = "measure", joinColumns = @JoinColumn(name = "measure_id"))
     @Enumerated(EnumType.STRING)
     private Set<Measure> measures;

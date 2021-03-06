@@ -6,10 +6,10 @@ create table measure
 create table product
 (
     id            bigserial not null,
-    deleting_sign boolean,
     name          varchar(255),
-    value         numeric(19, 2),
-    vendor_code   varchar(255),
+    price         numeric(19, 2) CHECK (price >=0),
+    vendor_code   varchar(255) unique,
+    deleting_sign boolean,
     user_id       int8,
     primary key (id)
 );;
@@ -21,8 +21,8 @@ create table roles
 create table shipment
 (
     id         bigserial not null,
-    barcode    varchar(255),
-    weight     numeric(19, 2),
+    barcode    varchar(255) unique,
+    weight     numeric(19, 2) CHECK (weight >=0),
     product_id int8,
     primary key (id)
 );

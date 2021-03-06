@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.milov.shoptest.dto.UserDto;
 import ru.milov.shoptest.entity.Role;
 import ru.milov.shoptest.entity.User;
@@ -29,6 +30,10 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+        return userRepository.findByLogin(login);
+    }
+
+    public User getUser(String login){
         return userRepository.findByLogin(login);
     }
 
@@ -68,6 +73,7 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public List<UserDto> findAll() {
         return userRepository.findAll().stream()
                 .map(UserMapper.INSTANCE::toDto)
