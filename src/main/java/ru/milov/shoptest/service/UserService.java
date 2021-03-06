@@ -8,11 +8,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.milov.shoptest.dto.UserDto;
-import ru.milov.shoptest.entity.Role;
+import ru.milov.shoptest.entity.Roles;
 import ru.milov.shoptest.entity.User;
 import ru.milov.shoptest.mappers.UserMapper;
 import ru.milov.shoptest.repository.UserRepository;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +23,8 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    private final UserMapper userMapper;
+
     private final PasswordEncoder passwordEncoder;
 
 //    private final MailSender mailSender;
@@ -33,21 +34,21 @@ public class UserService implements UserDetailsService {
         return userRepository.findByLogin(login);
     }
 
-    public User getUser(String login){
+    public User getUser(String login) {
         return userRepository.findByLogin(login);
     }
 
-    public boolean addUser(User user){
+    public boolean addUser(User user) {
         User userFromDb = userRepository.findByLogin(user.getLogin());
 
-        if (userFromDb != null) return false;
+        if (userFromDb != null) {
+            return false;
+        }
 
         user.setActive(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Collections.singleton(Role.USER));
+        user.setRoles(Collections.singleton(Roles.USER));
         user.setActivationCode(UUID.randomUUID().toString());
-
-        System.out.println(user);
 
         userRepository.save(user);
 
@@ -64,7 +65,7 @@ public class UserService implements UserDetailsService {
     public boolean activateUser(String code) {
         User user = userRepository.findByActivationCode(code);
 
-        if(user==null) return false;
+        if (user == null) return false;
 
         user.setActivationCode(null);
 
@@ -76,11 +77,8 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = true)
     public List<UserDto> findAll() {
         return userRepository.findAll().stream()
-                .map(UserMapper.INSTANCE::toDto)
+                .map(userMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public User findByName(String name) {
-        return userRepository.findByLogin(name);
-    }
 }

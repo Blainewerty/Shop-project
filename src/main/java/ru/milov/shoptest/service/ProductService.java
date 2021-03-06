@@ -13,26 +13,25 @@ import ru.milov.shoptest.repository.ProductRepository;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
-    private final UserService userService;
+    private final ProductRepository productRepository;
 
     private final ShipmentService shipmentService;
 
     @Transactional(readOnly = true)
     public List<ProductDto> findAll() {
         return productRepository.findAll().stream()
-                .map(ProductMapper.INSTANCE::toDto).collect(Collectors.toList());
+                .map(productMapper::toDto).collect(Collectors.toList());
     }
 
-    private Product getProduct(String vendorCode){
+    private Product getProduct(String vendorCode) {
         return productRepository.findByVendorCode(vendorCode);
     }
 
@@ -45,8 +44,9 @@ public class ProductService {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Product product = getProduct(vendorCode);
         product.setUser(user);
-        Optional<Shipment> optional = product.getShipments().stream().map(i -> i.setWeight(i.getWeight().subtract(count))).findFirst();
-        Shipment shipment = optional.orElse(null);
+        Shipment shipment = product.getShipments().stream()
+                .map(i -> i.setWeight(i.getWeight()
+                .subtract(count))).findFirst().orElse(null);
         shipmentService.updateShipment(shipment);
     }
 
@@ -57,8 +57,12 @@ public class ProductService {
 
     public void updateProduct(Product product, String vendorCode) {
         Product productFromDB = getProduct(vendorCode);
-        if(product.getPrice() != null) productFromDB.setPrice(product.getPrice());
-        if(product.getName() != null) productFromDB.setName(product.getName());
+        if (product.getPrice() != null) {
+            productFromDB.setPrice(product.getPrice());
+        }
+        if (product.getName() != null) {
+            productFromDB.setName(product.getName());
+        }
         productRepository.save(productFromDB);
 
     }
@@ -67,6 +71,6 @@ public class ProductService {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return productRepository.findByUser(user)
                 .stream()
-                .map(ProductMapper.INSTANCE::toDto).collect(Collectors.toList());
+                .map(productMapper::toDto).collect(Collectors.toList());
     }
 }

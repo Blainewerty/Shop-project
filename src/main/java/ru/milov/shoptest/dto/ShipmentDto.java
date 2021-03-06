@@ -4,7 +4,6 @@ import lombok.Data;
 import ru.milov.shoptest.entity.Measure;
 import ru.milov.shoptest.entity.Product;
 import ru.milov.shoptest.entity.Shipment;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;

@@ -6,12 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.milov.shoptest.dto.ProductDto;
 import ru.milov.shoptest.dto.ShipmentDto;
 import ru.milov.shoptest.dto.UserDto;
-import ru.milov.shoptest.entity.Arrival;
+import ru.milov.shoptest.dto.Arrival;
 import ru.milov.shoptest.entity.Product;
 import ru.milov.shoptest.service.ProductService;
 import ru.milov.shoptest.service.ShipmentService;
 import ru.milov.shoptest.service.UserService;
-
 import java.util.List;
 
 @RestController

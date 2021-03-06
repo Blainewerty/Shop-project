@@ -4,13 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.milov.shoptest.dto.ShipmentDto;
-import ru.milov.shoptest.entity.Measure;
 import ru.milov.shoptest.entity.Product;
 import ru.milov.shoptest.entity.Shipment;
 import ru.milov.shoptest.mappers.ShipmentMapper;
 import ru.milov.shoptest.repository.ShipmentRepository;
-
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,12 +15,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ShipmentService {
 
+    private final ShipmentMapper shipmentMapper;
+
     private final ShipmentRepository shipmentRepository;
 
     @Transactional(readOnly = true)
     public List<ShipmentDto> findAll() {
         return shipmentRepository.findAll().stream()
-                .map(ShipmentMapper.INSTANCE::toDto)
+                .map(shipmentMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -33,6 +32,6 @@ public class ShipmentService {
 
     public ShipmentDto addShipment(Product product, Shipment shipment) {
         shipment.setProduct(product);
-        return ShipmentMapper.INSTANCE.toDto(shipmentRepository.save(shipment));
+        return shipmentMapper.toDto(shipmentRepository.save(shipment));
     }
 }

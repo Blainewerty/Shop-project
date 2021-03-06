@@ -1,10 +1,8 @@
 package ru.milov.shoptest.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.milov.shoptest.dto.ProductDto;
-import ru.milov.shoptest.entity.User;
 import ru.milov.shoptest.service.ProductService;
 import java.math.BigDecimal;
 import java.util.List;

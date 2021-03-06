@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.function.Consumer;
 
 @Data
 @Entity
@@ -41,7 +39,7 @@ public class Product {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "shipment", joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "id"))
-    private List<Shipment> Shipments;
+    private List<Shipment> shipments;
 
 
 

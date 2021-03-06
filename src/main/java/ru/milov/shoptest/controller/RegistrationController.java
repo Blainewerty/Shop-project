@@ -17,11 +17,10 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String registerUser(@RequestBody User user) {
-        System.out.println(user);
         if (!userService.addUser(user)) {
-            return "User exist!";
+            return "redirect:/registration";
         } else userService.addUser(user);
-        return "Success!";
+        return "redirect:/shop";
     }
 
     @GetMapping("/activate/{code}")
